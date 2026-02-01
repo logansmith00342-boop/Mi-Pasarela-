@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Red Fluent Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-red: #450a0a;
+            --neon-red: #ef4444;
+            --glass-bg: rgba(20, 5, 5, 0.7);
+            --border-red: rgba(239, 68, 68, 0.2);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at center, #1a0505 0%, #050000 100%);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            color: white;
+        }
+
+        /* Fondo de partículas difuminadas */
+        .ambient-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: var(--neon-red);
+            filter: blur(180px);
+            border-radius: 50%;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        /* Contenedor Fluent Design */
+        .fluent-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 40px;
+            border: 1px solid var(--border-red);
+            border-radius: 28px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 0 1px 1px rgba(255, 255, 255, 0.05);
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            width: 100%;
+            max-width: 750px;
+        }
+
+        /* Tarjeta Visual Estilo Fluent */
+        .card-preview {
+            width: 300px;
+            height: 180px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(0, 0, 0, 0.4));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .chip-fluent {
+            width: 42px;
+            height: 32px;
+            background: linear-gradient(135deg, #7f1d1d, #450a0a);
+            border-radius: 4px;
+            opacity: 0.8;
+        }
+
+        .number-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Inputs Modernos */
+        .form-side { flex: 1; }
+
+        .input-group { margin-bottom: 24px; }
+        label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--neon-red);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--neon-red);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+        }
+
+        /* Botón Validar */
+        .btn-validate {
+            width: 100%;
+            background: var(--neon-red);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-validate:hover {
+            transform: translateY(-2px);
+            background: #f87171;
+            box-shadow: 0 12px 25px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-validate:active { transform: translateY(0); }
+
+        @media (max-width: 700px) {
+            .fluent-container { flex-direction: column; padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="ambient-glow"></div>
+
+<div class="fluent-container">
+    <div class="card-preview">
+        <div class="chip-fluent"></div>
+        <div class="number-display" id="display-num">•••• •••• •••• ••••</div>
+        <div style="text-align: right; font-size: 0.8rem; opacity: 0.6;" id="display-exp">MM/AA</div>
+    </div>
+
+    <div class="form-side">
+        <form id="payment-form">
+            <div class="input-group">
+                <label>Número de Tarjeta</label>
+                <input type="text" id="cc-num" name="cardnumber" autocomplete="cc-number" 
+                       inputmode="numeric" placeholder="5924 0000 0000 0000" maxlength="19" required>
+            </div>
+
+            <div class="input-group">
+                <label>Fecha de Vencimiento</label>
+                <input type="text" id="cc-exp" name="ccexp" autocomplete="cc-exp" 
+                       placeholder="MM/AA" maxlength="5" required>
+            </div>
+
+            <button type="submit" class="btn-validate">
+                VALIDAR TARJETA
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const n = document.getElementById('cc-num'), 
+          dn = document.getElementById('display-num'),
+          ex = document.getElementById('cc-exp'),
+          dex = document.getElementById('display-exp');
+
+    // Formateo de número y reflejo en tarjeta
+    n.oninput = (e) => {
+        let v = e.target.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
+        e.target.value = v;
+        dn.innerText = v || '•••• •••• •••• ••••';
+    };
+
+    // Formateo de fecha y reflejo en tarjeta
+    ex.oninput = (e) => {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length >= 2) v = v.slice(0, 2) + '/' + v.slice(2, 4);
+        e.target.value = v;
+        dex.innerText = v || 'MM/AA';
+    };
+
+    document.getElementById('payment-form').onsubmit = (e) => {
+        e.preventDefault();
+        alert('VALIDANDO CREDENCIALES... El navegador debería ofrecerte guardar esta tarjeta.');
+    };
+</script>
+
+</body>
+</html>
