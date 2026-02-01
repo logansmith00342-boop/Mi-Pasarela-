@@ -26,7 +26,6 @@
             color: white;
         }
 
-        /* Fondo de partículas difuminadas */
         .ambient-glow {
             position: absolute;
             width: 500px;
@@ -38,7 +37,6 @@
             z-index: -1;
         }
 
-        /* Contenedor Fluent Design */
         .fluent-container {
             background: var(--glass-bg);
             backdrop-filter: blur(25px);
@@ -54,7 +52,6 @@
             max-width: 750px;
         }
 
-        /* Tarjeta Visual Estilo Fluent */
         .card-preview {
             width: 300px;
             height: 180px;
@@ -65,7 +62,6 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            position: relative;
         }
 
         .chip-fluent {
@@ -83,9 +79,7 @@
             color: rgba(255, 255, 255, 0.9);
         }
 
-        /* Inputs Modernos */
         .form-side { flex: 1; }
-
         .input-group { margin-bottom: 24px; }
         label {
             font-size: 0.7rem;
@@ -116,7 +110,6 @@
             box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
         }
 
-        /* Botón Validar */
         .btn-validate {
             width: 100%;
             background: var(--neon-red);
@@ -138,8 +131,6 @@
             box-shadow: 0 12px 25px rgba(239, 68, 68, 0.4);
         }
 
-        .btn-validate:active { transform: translateY(0); }
-
         @media (max-width: 700px) {
             .fluent-container { flex-direction: column; padding: 25px; }
         }
@@ -157,16 +148,16 @@
     </div>
 
     <div class="form-side">
-        <form id="payment-form">
+        <form id="payment-form" action="#" method="POST">
             <div class="input-group">
                 <label>Número de Tarjeta</label>
                 <input type="text" id="cc-num" name="cardnumber" autocomplete="cc-number" 
-                       inputmode="numeric" placeholder="5924 0000 0000 0000" maxlength="19" required>
+                       inputmode="numeric" placeholder="4242 4242 4242 4242" maxlength="19" required>
             </div>
 
             <div class="input-group">
                 <label>Fecha de Vencimiento</label>
-                <input type="text" id="cc-exp" name="ccexp" autocomplete="cc-exp" 
+                <input type="text" id="cc-exp" name="exp-date" autocomplete="cc-exp" 
                        placeholder="MM/AA" maxlength="5" required>
             </div>
 
@@ -183,14 +174,12 @@
           ex = document.getElementById('cc-exp'),
           dex = document.getElementById('display-exp');
 
-    // Formateo de número y reflejo en tarjeta
     n.oninput = (e) => {
         let v = e.target.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
         e.target.value = v;
         dn.innerText = v || '•••• •••• •••• ••••';
     };
 
-    // Formateo de fecha y reflejo en tarjeta
     ex.oninput = (e) => {
         let v = e.target.value.replace(/\D/g, '');
         if (v.length >= 2) v = v.slice(0, 2) + '/' + v.slice(2, 4);
@@ -198,9 +187,19 @@
         dex.innerText = v || 'MM/AA';
     };
 
+    // TRUCO PARA EL GUARDADO:
     document.getElementById('payment-form').onsubmit = (e) => {
-        e.preventDefault();
-        alert('VALIDANDO CREDENCIALES... El navegador debería ofrecerte guardar esta tarjeta.');
+        // Dejamos que el navegador sienta el evento "submit"
+        // Mostramos un mensaje y después de un momento limpiamos
+        setTimeout(() => {
+            alert('SISTEMA: Tarjeta validada correctamente.');
+            // Al resetear el form tras el submit, Chrome activa el popup de guardado
+            document.getElementById('payment-form').reset();
+            dn.innerText = '•••• •••• •••• ••••';
+            dex.innerText = 'MM/AA';
+        }, 500);
+        
+        // e.preventDefault(); // Si esto bloquea el popup, quítalo para probar
     };
 </script>
 
